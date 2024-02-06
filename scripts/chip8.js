@@ -3,7 +3,7 @@ import Renderer from './renderer.js';
 const renderer = new Renderer(10); // scale by 10
 
 let loop;
-let fps = 60;
+let fps = 30;
 let fpsInterval;
 let startTime;
 let now;
@@ -33,7 +33,7 @@ function step()
         // Cycle the CPU. We will come back to this later.
     }
 
-    loop = requestAnimationFrame(step);
+     loop = requestAnimationFrame(step);
 }
 
 init();

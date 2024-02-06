@@ -69,12 +69,17 @@ class Renderer
 
     render()
     {
+     
+
         // clears the display every render cycle
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+
         // loop through the display array and draw pixels (remember it is 1 dimensional)
-        for (let i = 0; i < this.cols * this.rows; i)
+        for (let i = 0; i < this.cols * this.rows; i++)
         {
+          
+
             // grab the x position of the pixel base off i
             // using modulo to determine which column we are on
             // 4x4 example. If we are on element 5, 5 % 4 = 1 (first column)
@@ -84,6 +89,7 @@ class Renderer
             // 4x4 example. If we are on element 5, 5 / 4 = 1 (second row)
             let y = Math.floor(i / this.cols) * this.scale;
 
+        
             if(this.display[i])
             {
                 // set the pixel color
@@ -99,6 +105,8 @@ class Renderer
     {
         this.setPixel(0,0);
         this.setPixel(5, 2);
+        this.setPixel(8, 2);
+        this.setPixel(12, 6);
     }
 
 
