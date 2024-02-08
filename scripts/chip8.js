@@ -1,11 +1,11 @@
 import Renderer from './renderer.js';
-
 import Keyboard from './keyboard.js';
+import Speaker from './speaker.js';
 
 
-const renderer = new Renderer(10); // scale by 10
-
+const renderer = new Renderer(10); // scale by pixels by 10
 const keyboard = new Keyboard();
+const speaker = new Speaker();
 
 let loop;
 let fps = 30;
