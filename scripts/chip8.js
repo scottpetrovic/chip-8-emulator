@@ -10,13 +10,11 @@ let keyboard
 let speaker
 let cpu
 
-let loop;
-const cpuCyclesPerSecond = 60;
+const cpuCyclesPerSecond = 60; // lower numbers will slow down the game ( try 1)
 const cpuCycleInterval = 1000 / cpuCyclesPerSecond;
-let startTime;
 let now;
 let then;
-let elapsed;
+let elapsed = 0;
 let romArrayData;
 let gameFilename = 'Landing.ch8'; // initial game to load
 
@@ -27,7 +25,6 @@ const pcDOM = document.getElementById('programCounter');
 async function loadGame(gameFilename)
 {
     then = Date.now();
-    startTime = then;
 
     renderer = new Renderer(10); // scale by pixels by 10
     keyboard = new Keyboard();
@@ -40,7 +37,7 @@ async function loadGame(gameFilename)
 
     romArrayData = await cpu.loadRom(gameFilename);
     loadROMDataToDOM(romArrayData);
-    loop = requestAnimationFrame(step);
+    requestAnimationFrame(step);
 }
 
 function loadROMDataToDOM()
@@ -78,7 +75,7 @@ function loadROMDataToDOM()
 function step()
 {
     now = Date.now();
-    elapsed = now - then;
+    elapsed += now - then;
 
     // how fast we should call the operations to process
     if (elapsed > cpuCycleInterval)
@@ -86,15 +83,25 @@ function step()
         // process instructions
         cpu.cycle();
 
-        // show the next opcode to run on the DOM
+        // show the next opcode to run on the DOM. Opcode combines two bytes
+        // the cpu.memory is an array of bytes. We are combining two bytes to make an opcode
         // if we slow down the cycles, this could be more clear
-        pcDOM.innerHTML = cpu.pc;
+        // see CPU.js to see more information about this operation
+        let nextOpcode = (cpu.memory[cpu.pc] << 8 | cpu.memory[cpu.pc + 1]);
+        pcDOM.innerHTML = binaryToHex(nextOpcode);
 
-
-        // update canvas element (don't need to do this more than the CPU cycles)
-        // thre isn't any animations happening outside of CPU cycles
-        loop = requestAnimationFrame(step);
+        elapsed = 0;
+        then = Date.now();
     }
+
+    // game loop, so need to keep calling this continuously
+    requestAnimationFrame(step);
+
+}
+
+// function that converts decimal into hexadecimal
+function binaryToHex(d) {
+    return '0x' + d.toString(16).padStart(2, "0").toUpperCase();
 }
 
 
@@ -125,6 +132,23 @@ function arrayBufferAsHex(arrayBuffer) {
 document.getElementById('gameSelect').addEventListener('change', function() {
     loadGame(this.value);
 });
+
+// pause the game
+document.getElementById('pauseButton').addEventListener('click', function() {
+
+    if (this.innerHTML === 'Pause Game')
+    {        
+        cpu.paused = true;
+        this.innerHTML = 'Play Game';
+    }
+    else
+    {
+        cpu.paused = false;
+        this.innerHTML = 'Pause Game';
+    }
+});
+
+
 
 // load the game to begin
 loadGame(gameFilename);

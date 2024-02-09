@@ -220,9 +220,6 @@ class CPU
           opcode operations
           Opcodes are broken into groups, organized by the higest bit
           0x0NNN - System Call (can be ignored)
-
- 
- 
         */ 
 
         switch (opcode & 0xF000) {
