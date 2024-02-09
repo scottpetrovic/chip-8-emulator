@@ -4,33 +4,35 @@ import Speaker from './speaker.js';
 import CPU from './cpu.js';
 
 // Built from tutorial at https://www.freecodecamp.org/news/creating-your-very-own-chip-8-emulator/
-
 // technical reference to make this possible: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#2.2
-
-
-
-const renderer = new Renderer(10); // scale by pixels by 10
-const keyboard = new Keyboard();
-const speaker = new Speaker();
-const cpu = new CPU(renderer, keyboard, speaker);
+let renderer
+let keyboard
+let speaker
+let cpu
 
 let loop;
 let fps = 30;
-let fpsInterval;
+let fpsInterval = 1000 / fps;
 let startTime;
 let now;
 let then;
 let elapsed;
 let romArrayData;
+let gameFilename = 'Landing.ch8'; // initial game to load
 
-async function init()
+async function loadGame(gameFilename)
 {
-    fpsInterval = 1000 / fps;
     then = Date.now();
     startTime = then;
 
+    renderer = new Renderer(10); // scale by pixels by 10
+    keyboard = new Keyboard();
+    speaker = new Speaker();
+    cpu = new CPU(renderer, keyboard, speaker);
+
     cpu.loadSpriteIntoMemory();
-    romArrayData = await cpu.loadRom('Landing.ch8')
+
+    romArrayData = await cpu.loadRom(gameFilename);
     loadROMDataToDOM(romArrayData);
     loop = requestAnimationFrame(step);
 }
@@ -95,5 +97,11 @@ function arrayBufferAsHex(arrayBuffer) {
     return hexData;
 }
 
+// watch out for the select HTML tag for changes
+// since we are using modules in javascript, we can't use the normal onChange attribute
+document.getElementById('gameSelect').addEventListener('change', function() {
+    loadGame(this.value);
+});
 
-init();
+// load the game to begin
+loadGame(gameFilename);

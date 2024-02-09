@@ -4,6 +4,20 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    
+    <div style="display: flex">
+      <div>Game to Load:</div>
+      <select id="gameSelect">
+        <option value="Landing.ch8">Landing</option>
+        <option value="Blinky.ch8">Blinky</option>
+        <option value="Blitz.ch8">Blitz</option>
+        <option value="Breakout.ch8">Breakout</option>
+      </select>
+    </div>
+
+  
+
+    
     <div style="display: flex; flex-direction: row">
       <canvas></canvas>
       <div style="padding: 1rem; border: 1px solid grey; display: inline-flex;">
@@ -11,7 +25,9 @@
       </div>
     </div>
 
-
     <script type="module" src="scripts/chip8.js"></script>
+
+
+
   </body>
 </html>
