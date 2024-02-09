@@ -83,12 +83,15 @@ function step()
         // process instructions
         cpu.cycle();
 
-        // show the next opcode to run on the DOM. Opcode combines two bytes
-        // the cpu.memory is an array of bytes. We are combining two bytes to make an opcode
-        // if we slow down the cycles, this could be more clear
-        // see CPU.js to see more information about this operation
-        let nextOpcode = (cpu.memory[cpu.pc] << 8 | cpu.memory[cpu.pc + 1]);
-        pcDOM.innerHTML = binaryToHex(nextOpcode);
+        if (cpu.paused === false)
+        {
+            // show the next opcode to run on the DOM. Opcode combines two bytes
+            // the cpu.memory is an array of bytes. We are combining two bytes to make an opcode
+            // if we slow down the cycles, this could be more clear
+            // see CPU.js to see more information about this operation
+            let nextOpcode = (cpu.memory[cpu.pc] << 8 | cpu.memory[cpu.pc + 1]);
+            pcDOM.innerHTML = binaryToHex(nextOpcode);
+        }
 
         elapsed = 0;
         then = Date.now();
