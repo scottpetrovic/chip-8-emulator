@@ -1,11 +1,13 @@
 import Renderer from './renderer.js';
 import Keyboard from './keyboard.js';
 import Speaker from './speaker.js';
+import CPU from './cpu.js';
 
 
 const renderer = new Renderer(10); // scale by pixels by 10
 const keyboard = new Keyboard();
 const speaker = new Speaker();
+const cpu = new CPU(renderer, keyboard, speaker);
 
 let loop;
 let fps = 30;
@@ -21,9 +23,8 @@ function init()
     then = Date.now();
     startTime = then;
 
-    // TESTING CODE
-    renderer.testRender();
-    renderer.render();
+    cpu.loadSpriteIntoMemory();
+    cpu.loadRom('BLITZ')
 
     loop = requestAnimationFrame(step);
 }
@@ -35,7 +36,7 @@ function step()
 
     if (elapsed > fpsInterval)
     {
-        // Cycle the CPU. We will come back to this later.
+        cpu.cycle();
     }
 
      loop = requestAnimationFrame(step);
