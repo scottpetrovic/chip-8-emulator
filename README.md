@@ -9,3 +9,9 @@ Some important concept that you learn through building this:
 - How to use the canvas to build out a custom display
 
 ![Chip-8 Emulator](screenshot.png)
+
+Here is a screenshot of what I have. I made a few changes from the tutorial:
+- Added play/pause game. This effectively stops the emulator's CPU from processing
+- When reading in the ROM file, show the binary data that is loaded. This can be converted to opcodes that the program uses
+- Ability to change out the game
+- Show which opcode will be ran the next CPU cycle.
