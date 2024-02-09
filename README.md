@@ -18,9 +18,9 @@ Here is a screenshot of what I have. I made a few changes from the tutorial:
 
 
 # Running
-This all runs on pretty basic javascript and Node.
+This all runs on vanilla javascript and Node.
 
     npm install
     npm run dev
 
-That should be it. 
+
