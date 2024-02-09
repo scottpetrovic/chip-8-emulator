@@ -4,7 +4,14 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <canvas></canvas>
+    <div style="display: flex; flex-direction: row">
+      <canvas></canvas>
+      <div style="padding: 1rem; border: 1px solid grey; display: inline-flex;">
+        <div id="romDataDOM">ROM loaded data here</div>
+      </div>
+    </div>
+
+
     <script type="module" src="scripts/chip8.js"></script>
   </body>
 </html>

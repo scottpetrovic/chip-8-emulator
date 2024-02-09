@@ -111,49 +111,22 @@ class CPU
      * loadRom - Loading ROM from the server 
      * @param {} romName 
      */
-    loadRom(romName)
+    async loadRom(romName)
     {
         // once we are inside our promise, we need to use self to refer back to the base scope
         var self = this;
 
         // for Vite to load the roms correctly, we need to add the roms to the public folder
         // you won't see that in the URL as that is an internal Vite server thing
-        fetch('roms/' + romName)
-        .then(response => {
+        const response = await fetch('roms/' + romName)
+       
+        // ready response and return an array buffer from it
+        const array_buffer = await response.arrayBuffer();
+        let program = new Uint8Array(array_buffer);
+        self.loadProgramIntoMemory(program);
 
-            console.log('file loaded (javascript reponse type)', response)
-
-            // ready response and return an array buffer from it
-            response.arrayBuffer().then(buffer => {
-
-                let program = new Uint8Array(buffer);
-
-                // program will just come back as numbers. let's see a few different 
-                // interpretations of the program data
-                console.log('array buffer as binary (0s and 1s)', self.displayUint8ArrayAsBinary(program))
-                console.log('array buffer as hexadecimal', self.displayUint8ArrayAsHex(program))
-
-                self.loadProgramIntoMemory(program);
-            })
-        });
+        return array_buffer; // array buffer data to help show in the UI later
     }
-
-    // internal debugging for seeing the memory
-    displayUint8ArrayAsBinary(uint8Array) {
-        // padStart is a string method that will add 0s to the left of the string until it is the length of 8
-        // toString(2) converts a number to a string. The 2 is the radix, which is the base of the numeral system (0 or 1)
-        let binaryStrings = Array.from(uint8Array, byte => byte.toString(2).padStart(8, '0'));
-
-        // brings all the values back to together as one string to display
-        return binaryStrings.join(' ');
-    }
-
-    displayUint8ArrayAsHex(uint8Array) {
-        // padStart(2) makes sure each value is stored as 2 characters
-        let hexStrings = Array.from(uint8Array, byte => byte.toString(16).padStart(2, '0'));
-        return hexStrings.join(' ');
-    }
-
 
     /**
      * Every cycle, the CPU fetches the next opcode from memory, decodes it, and executes it.
