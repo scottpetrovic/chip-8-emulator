@@ -125,6 +125,8 @@ class CPU
             }
         }
 
+        // for Vite to load the roms correctly, we need to add the roms to the public folder
+        // you won't see that in the URL as that is an internal Vite thing
         request.open('GET', 'roms/' + romName, true);
 
         // Array buffer is a generic, fixed length raw binary data buffer
