@@ -24,7 +24,7 @@ function init()
     startTime = then;
 
     cpu.loadSpriteIntoMemory();
-    cpu.loadRom('BLITZ')
+    cpu.loadRom('Landing.ch8')
 
     loop = requestAnimationFrame(step);
 }

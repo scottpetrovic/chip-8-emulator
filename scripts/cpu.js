@@ -113,30 +113,47 @@ class CPU
      */
     loadRom(romName)
     {
-        var request = new XMLHttpRequest();
+        // once we are inside our promise, we need to use self to refer back to the base scope
         var self = this;
 
-        request.onload = function()
-        {
-            if(request.response)
-            {
-                let program = new Uint8Array(request.response);
-                self.loadProgramIntoMemory(program);
-            }
-        }
-
         // for Vite to load the roms correctly, we need to add the roms to the public folder
-        // you won't see that in the URL as that is an internal Vite thing
-        request.open('GET', 'roms/' + romName, true);
+        // you won't see that in the URL as that is an internal Vite server thing
+        fetch('roms/' + romName)
+        .then(response => {
 
-        // Array buffer is a generic, fixed length raw binary data buffer
-        // You cannot directly manipulate contents of an array buffer
-        // This is a common format when working with audio and video files
-        // really any type of data that cannot be represented as a simple text
-        request.responseType = 'arraybuffer';
+            console.log('file loaded (javascript reponse type)', response)
 
-        request.send();
+            // ready response and return an array buffer from it
+            response.arrayBuffer().then(buffer => {
+
+                let program = new Uint8Array(buffer);
+
+                // program will just come back as numbers. let's see a few different 
+                // interpretations of the program data
+                console.log('array buffer as binary (0s and 1s)', self.displayUint8ArrayAsBinary(program))
+                console.log('array buffer as hexadecimal', self.displayUint8ArrayAsHex(program))
+
+                self.loadProgramIntoMemory(program);
+            })
+        });
     }
+
+    // internal debugging for seeing the memory
+    displayUint8ArrayAsBinary(uint8Array) {
+        // padStart is a string method that will add 0s to the left of the string until it is the length of 8
+        // toString(2) converts a number to a string. The 2 is the radix, which is the base of the numeral system (0 or 1)
+        let binaryStrings = Array.from(uint8Array, byte => byte.toString(2).padStart(8, '0'));
+
+        // brings all the values back to together as one string to display
+        return binaryStrings.join(' ');
+    }
+
+    displayUint8ArrayAsHex(uint8Array) {
+        // padStart(2) makes sure each value is stored as 2 characters
+        let hexStrings = Array.from(uint8Array, byte => byte.toString(16).padStart(2, '0'));
+        return hexStrings.join(' ');
+    }
+
 
     /**
      * Every cycle, the CPU fetches the next opcode from memory, decodes it, and executes it.
