@@ -8,3 +8,4 @@ Some important concept that you learn through building this:
 - Seeing the parallel with the code you are writing, and assembly instructions that parity the operations
 - How to use the canvas to build out a custom display
 
+![Chip-8 Emulator](screenshot.png)
