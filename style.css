@@ -9,6 +9,6 @@ canvas {
 #romDataDOM {
     height: 18rem;
     overflow: scroll;
-    width: 9rem;
+    width: 20rem; /* enough space for 2 bytes of data */
     overflow-x: hidden;
 }

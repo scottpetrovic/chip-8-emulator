@@ -14,9 +14,6 @@
         <option value="Breakout.ch8">Breakout</option>
       </select>
     </div>
-
-  
-
     
     <div style="display: flex; flex-direction: row">
       <canvas></canvas>
@@ -24,6 +21,11 @@
         <div id="romDataDOM">ROM loaded data here</div>
       </div>
     </div>
+
+    <span>
+      Program Counter (next opcode that will run) <span id="programCounter"></span>
+    </span>
+   
 
     <script type="module" src="scripts/chip8.js"></script>
 

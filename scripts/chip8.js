@@ -11,14 +11,18 @@ let speaker
 let cpu
 
 let loop;
-let fps = 30;
-let fpsInterval = 1000 / fps;
+const cpuCyclesPerSecond = 60;
+const cpuCycleInterval = 1000 / cpuCyclesPerSecond;
 let startTime;
 let now;
 let then;
 let elapsed;
 let romArrayData;
 let gameFilename = 'Landing.ch8'; // initial game to load
+
+// we will show the program counter (pc) in the DOM for educational reasons
+const pcDOM = document.getElementById('programCounter');
+
 
 async function loadGame(gameFilename)
 {
@@ -30,6 +34,8 @@ async function loadGame(gameFilename)
     speaker = new Speaker();
     cpu = new CPU(renderer, keyboard, speaker);
 
+    // there are some built-in spritse as part of the chip-8 system
+    // anything other than this needs to be stored in the ROM file
     cpu.loadSpriteIntoMemory();
 
     romArrayData = await cpu.loadRom(gameFilename);
@@ -56,7 +62,15 @@ function loadROMDataToDOM()
     const romBinaryDOM = document.getElementById('romDataDOM');
     let textBuilder = '';
     romBinaryData.forEach( (data, idx) => {
-        textBuilder += ` ${data} <strong>${romHexData[idx]}</strong>  \n`;
+
+        // do a line break every other byte code. An opcode is 2 bytes
+        if (idx % 2 === 0)
+        {
+            textBuilder += '<br> OpCode: ';
+        }
+        // <strong>${romHexData[idx].toUpperCase()
+        textBuilder += `${data}</strong> &nbsp;&nbsp;&nbsp;`;
+
     });
     romBinaryDOM.innerHTML = textBuilder;
 }
@@ -66,12 +80,21 @@ function step()
     now = Date.now();
     elapsed = now - then;
 
-    if (elapsed > fpsInterval)
+    // how fast we should call the operations to process
+    if (elapsed > cpuCycleInterval)
     {
+        // process instructions
         cpu.cycle();
-    }
 
-     loop = requestAnimationFrame(step);
+        // show the next opcode to run on the DOM
+        // if we slow down the cycles, this could be more clear
+        pcDOM.innerHTML = cpu.pc;
+
+
+        // update canvas element (don't need to do this more than the CPU cycles)
+        // thre isn't any animations happening outside of CPU cycles
+        loop = requestAnimationFrame(step);
+    }
 }
 
 
