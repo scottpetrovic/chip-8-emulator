@@ -15,3 +15,12 @@ Here is a screenshot of what I have. I made a few changes from the tutorial:
 - When reading in the ROM file, show the binary data that is loaded. This can be converted to opcodes that the program uses
 - Ability to change out the game
 - Show which opcode will be ran the next CPU cycle.
+
+
+# Running
+This all runs on pretty basic javascript and Node.
+
+    npm install
+    npm run dev
+
+That should be it. 
